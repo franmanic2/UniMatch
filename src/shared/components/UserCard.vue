@@ -75,9 +75,15 @@ const getBadgeClass = (sede) => {
       </transition>
       
       <div v-if="user.fotos && user.fotos.length > 1" class="photo-controls">
-          <button class="nav-btn prev" @click="prevPhoto">‹</button>
+          <button class="nav-btn prev" @click="prevPhoto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+          
           <span class="photo-counter">{{ currentPhotoIndex + 1 }}/{{ user.fotos.length }}</span>
-          <button class="nav-btn next" @click="nextPhoto">›</button>
+          
+          <button class="nav-btn next" @click="nextPhoto">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </button>
       </div>
     </div>
     
@@ -164,31 +170,51 @@ const getBadgeClass = (sede) => {
     left: 0;
     width: 100%;
     height: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     pointer-events: none;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 20%, transparent 80%, rgba(0,0,0,0.4) 100%);
+    /* Gradient only at top for counter visibility */
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, transparent 25%);
+    transition: opacity 0.3s ease;
 }
 
 .nav-btn {
     pointer-events: auto;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0, 0, 0, 0.5);
     color: white;
-    border: none;
-    font-size: 1.5rem;
-    width: 40px;
-    height: 100%;
+    border: 1px solid rgba(255,255,255,0.2);
+    width: 32px; /* Smaller, circular */
+    height: 32px;
+    border-radius: 50%;
     cursor: pointer;
-    transition: background 0.2s;
     backdrop-filter: blur(4px);
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.2s ease;
+    opacity: 0; /* Hidden by default */
+}
+
+/* Position buttons */
+.nav-btn.prev { left: 10px; }
+.nav-btn.next { right: 10px; }
+
+/* Show on hover */
+.image-container:hover .nav-btn {
+    opacity: 1; /* Make visible when hovering the image */
 }
 
 .nav-btn:hover {
-    background: rgba(0,0,0,0.6);
+    background: rgba(255, 71, 87, 0.9); /* Primary color on hover */
+    transform: translateY(-50%) scale(1.1);
+    border-color: transparent;
+    opacity: 1;
+}
+
+.nav-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .photo-counter {
