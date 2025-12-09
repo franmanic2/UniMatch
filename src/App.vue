@@ -1,47 +1,71 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { onMounted, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import TheHeader from '@/shared/components/TheHeader.vue';
+import TheFooter from '@/shared/components/TheFooter.vue';
+import { userStore } from '@/modules/auth/store/userStore';
+
+const isAuthenticated = computed(() => !!userStore.user);
+
+onMounted(() => {
+  userStore.initialize();
+});
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+  <div class="app-layout">
+    <TheHeader />
+    <main class="main-content" :class="{ 'with-header': isAuthenticated }">
+      <router-view :key="$route.fullPath" />
+    </main>
+    
+    <!-- Loading Overlay -->
+    <div v-if="userStore.loading" class="loading-overlay">
+      <div class="spinner"></div>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    
+    <TheFooter />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
+<style>
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  position: relative;
+}
+.main-content {
+  flex: 1;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+.main-content.with-header {
+  padding-top: 60px;
 }
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-bg);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-  .logo {
-    margin: 0 2rem 0 0;
-  }
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--color-primary);
+  animation: spin 1s ease-in-out infinite;
+}
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 </style>
