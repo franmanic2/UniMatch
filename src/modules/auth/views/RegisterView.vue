@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase/config';
+import { notificationStore } from '@/shared/stores/notificationStore';
 
 const loading = ref(false);
 const error = ref('');

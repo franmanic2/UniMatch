@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/firebase/config';
+import { notificationStore } from '@/shared/stores/notificationStore';
 
 const email = ref('');
 const password = ref('');
@@ -13,11 +14,16 @@ const handleLogin = async () => {
   error.value = '';
   try {
     await signInWithEmailAndPassword(auth, email.value, password.value);
+    
+    // Set toast for after reload
+    notificationStore.setPendingNotification('¡Bienvenido de nuevo! 🎉');
+    
     // Use window.location instead of router.push to ensure clean state
     window.location.href = '/dashboard';
   } catch (err) {
     error.value = err.message;
     loading.value = false;
+    notificationStore.showNotification('Error al iniciar sesión: ' + err.message, 'error');
   }
 };
 </script>

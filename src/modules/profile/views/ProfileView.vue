@@ -82,9 +82,12 @@ const loadProfile = async () => {
     }
 };
 
+import { notificationStore } from '@/shared/stores/notificationStore'; // Add import
+
+// ...
+
 const handleUpdate = async () => {
     saving.value = true;
-    message.value = '';
     try {
         const docRef = doc(db, 'users', userStore.user.uid);
         
@@ -118,9 +121,9 @@ const handleUpdate = async () => {
         newFiles.value = [];
         newPreviewUrls.value = [];
 
-        message.value = 'Profile updated successfully!';
+        notificationStore.showNotification('¡Perfil actualizado correctamente! ✅', 'success');
     } catch (err) {
-        message.value = 'Error updating profile: ' + err.message;
+        notificationStore.showNotification('Error al actualizar: ' + err.message, 'error');
     } finally {
         saving.value = false;
     }

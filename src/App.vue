@@ -3,17 +3,21 @@ import { onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import TheHeader from '@/shared/components/TheHeader.vue';
 import TheFooter from '@/shared/components/TheFooter.vue';
+import TheToast from '@/shared/components/TheToast.vue';
 import { userStore } from '@/modules/auth/store/userStore';
+import { notificationStore } from '@/shared/stores/notificationStore';
 
 const isAuthenticated = computed(() => !!userStore.user);
 
 onMounted(() => {
   userStore.initialize();
+  notificationStore.checkPendingNotification();
 });
 </script>
 
 <template>
   <div class="app-layout">
+    <TheToast />
     <TheHeader />
     <main class="main-content" :class="{ 'with-header': isAuthenticated }">
       <router-view :key="$route.fullPath" />
