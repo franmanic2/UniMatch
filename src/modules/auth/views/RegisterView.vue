@@ -1,11 +1,9 @@
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '@/firebase/config';
 
-const router = useRouter();
 const loading = ref(false);
 const error = ref('');
 
@@ -81,7 +79,8 @@ const handleRegister = async () => {
       createdAt: new Date()
     });
 
-    router.push('/dashboard');
+
+    window.location.href = '/dashboard';
   } catch (err) {
     error.value = err.message;
   } finally {
